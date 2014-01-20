@@ -7,7 +7,6 @@
 //
 
 #import "ToDoItemCell.h"
-#import "ToDoListViewController.h"
 #import <objc/runtime.h>
 
 
@@ -22,50 +21,11 @@
     return self;
 }
 
-- (id) initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-    }
-    return self;
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
 }
-
-//- (IBAction)toDoItemCellDoneButtonClicked:(id)sender {
-//    [self endEditing: YES];    //dismisses the keyboard
-//
-//    [self updateToDoItemsList]; 
-//}
-
--(IBAction)onTextFieldDoneEditing:(id)sender {
-    [self endEditing: YES];    //dismisses the keyboard
-    [self updateToDoItemsList];
-}
-
-- (IBAction)onDelete:(id)sender {
-    [self.delegate deleteButtonTappedOnCell:self];
-}
-
-- (void) updateToDoItemsList {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *toDoItemList = [defaults objectForKey:@"toDoItemList"];
-    
-    NSMutableArray *newList = [[NSMutableArray alloc] initWithArray:toDoItemList];
-    
-//    NSIndexPath *indexPath = objc_getAssociatedObject(self.toDoItemText, &indexPathKey);
-
-    
-    newList[newList.count - 1] = self.toDoItemText.text;
-    
-    [defaults setObject:newList forKey:@"toDoItemList"];
-    [defaults synchronize];
-}
-
-
 
 @end

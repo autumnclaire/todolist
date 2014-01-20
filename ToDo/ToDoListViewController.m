@@ -10,18 +10,13 @@
 #import "ToDoItemCell.h"
 #import <objc/runtime.h>
 
-static char indexPathKey;
 
 @interface ToDoListViewController ()
 
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *addToDoItemButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *editToDoItemButton;
-
 @property (strong, nonatomic) NSMutableArray *toDoItemList;
 
-- (IBAction)onAddButtonClicked:(id)sender;
-- (IBAction)onEditButtonClicked:(id)sender;
+- (void)onAddButtonClicked;
 
 - (NSMutableArray*) fetchToDoItemListFromDataStore;
 - (void) updateToDoItemListInDataStore;
@@ -35,6 +30,7 @@ static char indexPathKey;
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        self.title = @"To Do List";
     }
     return self;
 }
@@ -51,27 +47,18 @@ static char indexPathKey;
     return self;
 }
 
-- (NSMutableArray*) fetchToDoItemListFromDataStore {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *savedList = [defaults objectForKey:@"toDoItemList"];
-    return [[NSMutableArray alloc] initWithArray:savedList];
-}
 
-- (void) updateToDoItemListInDataStore {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:self.toDoItemList forKey:@"toDoItemList"];
-    [defaults synchronize];
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-
     
     UINib *toDoCellNib = [UINib nibWithNibName:@"ToDoItemCell" bundle:nil];
     [self.tableView registerNib:toDoCellNib forCellReuseIdentifier:@"ToDoItemCell"];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddButtonClicked)];
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+
     self.toDoItemList = [self fetchToDoItemListFromDataStore];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -89,6 +76,10 @@ static char indexPathKey;
 
 #pragma mark - Table view data source
 
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -99,62 +90,18 @@ static char indexPathKey;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-
-    
     static NSString *CellIdentifier = @"ToDoItemCell";
     ToDoItemCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     NSString *toDoItem = [self.toDoItemList objectAtIndex:indexPath.row];
     
     cell.toDoItemText.text = toDoItem;
+    [cell.toDoItemText setBorderStyle:UITextBorderStyleNone];
+    cell.shouldIndentWhileEditing = YES;
     cell.toDoItemText.delegate = self;
-    objc_setAssociatedObject(cell.toDoItemText, &indexPathKey, indexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        
     
     return cell;
 }
-
-- (IBAction)onAddButtonClicked:(id)sender {
-    self.toDoItemList = [self fetchToDoItemListFromDataStore];
-    [self.toDoItemList addObject:[[NSString alloc] init]];
-
-    [self updateToDoItemListInDataStore];
-    
-    [self.tableView reloadData];
-}
-
-- (IBAction)onEditButtonClicked:(id)sender {
-    [self setEditing:YES animated:YES];
-    
-}
-
-- (BOOL) textFieldShouldReturn:(UITextField *)textField {
-    
-    return YES;
-    
-}
-
-- (void)deleteButtonTappedOnCell:(id)sender {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-    
-    [self.toDoItemList removeObjectAtIndex:indexPath.row];
-    
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
-    
-}
-
-
-
-
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-
 
 
 // Override to support editing the table view.
@@ -162,7 +109,9 @@ static char indexPathKey;
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+        [self.toDoItemList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self updateToDoItemListInDataStore];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -170,33 +119,65 @@ static char indexPathKey;
 }
 
 
-/*
+
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+    
+    NSObject *fromItem = [self.toDoItemList objectAtIndex:fromIndexPath.row];
+    NSObject *toItem = [self.toDoItemList objectAtIndex:toIndexPath.row];
+    
+    [self.toDoItemList setObject:fromItem atIndexedSubscript:toIndexPath.row];
+    [self.toDoItemList setObject:toItem atIndexedSubscript:fromIndexPath.row];
+    [self updateToDoItemListInDataStore];
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
+- (void)onAddButtonClicked {
+    self.toDoItemList = [self fetchToDoItemListFromDataStore];
+    [self.toDoItemList insertObject:@"" atIndex:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    ToDoItemCell *newCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [newCell.toDoItemText becomeFirstResponder];
+    
+    [self updateToDoItemListInDataStore];
+    
+    [self.tableView reloadData];
+}
+
+- (void) onDoneWithAddingButtonClicked {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddButtonClicked)];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    ToDoItemCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [cell.toDoItemText resignFirstResponder];
+    [self.toDoItemList setObject:cell.toDoItemText.text atIndexedSubscript:0];
+    [self.tableView reloadData];
+    [self updateToDoItemListInDataStore];
+}
+
+- (NSMutableArray*) fetchToDoItemListFromDataStore {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *savedList = [defaults objectForKey:@"toDoItemList"];
+    return [[NSMutableArray alloc] initWithArray:savedList];
+}
+
+- (void) updateToDoItemListInDataStore {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:self.toDoItemList forKey:@"toDoItemList"];
+    [defaults synchronize];
+}
+
+- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneWithAddingButtonClicked)];
+    self.navigationItem.rightBarButtonItem.title = @"Done";
     return YES;
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (BOOL) textFieldShouldEndEditing:(UITextField *)textField {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddButtonClicked)];
+//    self.navigationItem.rightBarButtonItem.style = UIBarButtonSystemItemAdd;
+    return YES;
 }
 
- */
 
 
 @end

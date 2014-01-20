@@ -13,7 +13,6 @@
 		5B3E1E1D188A360F0064A632 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B3E1E1B188A360F0064A632 /* InfoPlist.strings */; };
 		5B3E1E1F188A360F0064A632 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3E1E1E188A360F0064A632 /* main.m */; };
 		5B3E1E23188A360F0064A632 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3E1E22188A360F0064A632 /* AppDelegate.m */; };
-		5B3E1E26188A360F0064A632 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B3E1E24188A360F0064A632 /* Main.storyboard */; };
 		5B3E1E2B188A360F0064A632 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B3E1E2A188A360F0064A632 /* Images.xcassets */; };
 		5B3E1E32188A360F0064A632 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3E1E31188A360F0064A632 /* XCTest.framework */; };
 		5B3E1E33188A360F0064A632 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B3E1E12188A360F0064A632 /* Foundation.framework */; };
@@ -46,7 +45,6 @@
 		5B3E1E20188A360F0064A632 /* ToDo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ToDo-Prefix.pch"; sourceTree = "<group>"; };
 		5B3E1E21188A360F0064A632 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5B3E1E22188A360F0064A632 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		5B3E1E25188A360F0064A632 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5B3E1E2A188A360F0064A632 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5B3E1E30188A360F0064A632 /* ToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B3E1E31188A360F0064A632 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -119,7 +117,6 @@
 			children = (
 				5B3E1E21188A360F0064A632 /* AppDelegate.h */,
 				5B3E1E22188A360F0064A632 /* AppDelegate.m */,
-				5B3E1E24188A360F0064A632 /* Main.storyboard */,
 				5B3E1E2A188A360F0064A632 /* Images.xcassets */,
 				5B3E1E19188A360F0064A632 /* Supporting Files */,
 				5B3E1E47188A39240064A632 /* ToDoListViewController.h */,
@@ -239,7 +236,6 @@
 				5B3E1E2B188A360F0064A632 /* Images.xcassets in Resources */,
 				5B3E1E1D188A360F0064A632 /* InfoPlist.strings in Resources */,
 				5B3E1E4E188CBD640064A632 /* ToDoItemCell.xib in Resources */,
-				5B3E1E26188A360F0064A632 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,14 +286,6 @@
 				5B3E1E1C188A360F0064A632 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		5B3E1E24188A360F0064A632 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5B3E1E25188A360F0064A632 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		5B3E1E3A188A360F0064A632 /* InfoPlist.strings */ = {
@@ -470,6 +458,7 @@
 				5B3E1E43188A360F0064A632 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5B3E1E44188A360F0064A632 /* Build configuration list for PBXNativeTarget "ToDoTests" */ = {
 			isa = XCConfigurationList;
@@ -478,6 +467,7 @@
 				5B3E1E46188A360F0064A632 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

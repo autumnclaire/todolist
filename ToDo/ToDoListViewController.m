@@ -8,6 +8,9 @@
 
 #import "ToDoListViewController.h"
 #import "ToDoItemCell.h"
+#import <objc/runtime.h>
+
+static char indexPathKey;
 
 @interface ToDoListViewController ()
 
@@ -63,6 +66,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.delegate = self;
+
     
     UINib *toDoCellNib = [UINib nibWithNibName:@"ToDoItemCell" bundle:nil];
     [self.tableView registerNib:toDoCellNib forCellReuseIdentifier:@"ToDoItemCell"];
@@ -94,12 +99,18 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+
+    
     static NSString *CellIdentifier = @"ToDoItemCell";
     ToDoItemCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     NSString *toDoItem = [self.toDoItemList objectAtIndex:indexPath.row];
     
     cell.toDoItemText.text = toDoItem;
+    cell.toDoItemText.delegate = self;
+    objc_setAssociatedObject(cell.toDoItemText, &indexPathKey, indexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
     
     return cell;
 }
@@ -114,18 +125,38 @@
 }
 
 - (IBAction)onEditButtonClicked:(id)sender {
+    [self setEditing:YES animated:YES];
+    
 }
 
-/*
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    
+    return YES;
+    
+}
+
+- (void)deleteButtonTappedOnCell:(id)sender {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    
+    [self.toDoItemList removeObjectAtIndex:indexPath.row];
+    
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+}
+
+
+
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-*/
 
-/*
+
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -137,7 +168,7 @@
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.

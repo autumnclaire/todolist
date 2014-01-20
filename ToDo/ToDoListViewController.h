@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ToDoItemCell.h"
 
-@interface ToDoListViewController : UITableViewController
+@interface ToDoListViewController : UITableViewController <UITextFieldDelegate, TableCellDelegate>
 
 
 @end

@@ -13,7 +13,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ToDoItemCell" rowHeight="47" id="utY-Vx-awL" customClass="ToDoItemCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" showsReorderControl="YES" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ToDoItemCell" rowHeight="47" id="utY-Vx-awL" customClass="ToDoItemCell">
                                 <rect key="frame" x="0.0" y="86" width="320" height="47"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="utY-Vx-awL" id="O7W-TL-siW">
@@ -22,9 +22,12 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
+                        <connections>
+                            <outlet property="editToDoItemButton" destination="l82-ph-0VN" id="ZSZ-bG-qsJ"/>
+                        </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="To Do List" id="Z4s-HT-E5A">
-                        <barButtonItem key="leftBarButtonItem" title="Item" systemItem="edit" id="l82-ph-0VN">
+                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="l82-ph-0VN">
                             <connections>
                                 <action selector="onEditButtonClicked:" destination="SD4-Lt-eoT" id="4ZH-42-4V3"/>
                             </connections>
@@ -37,7 +40,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addToDoItemButton" destination="zf9-iV-H9D" id="oCU-3j-kcn"/>
-                        <outlet property="editToDoItemButton" destination="l82-ph-0VN" id="02p-bl-E7k"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZXz-BH-yzf" userLabel="First Responder" sceneMemberID="firstResponder"/>

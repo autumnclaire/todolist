@@ -7,6 +7,9 @@
 //
 
 #import "ToDoItemCell.h"
+#import "ToDoListViewController.h"
+#import <objc/runtime.h>
+
 
 @implementation ToDoItemCell
 
@@ -42,8 +45,10 @@
 -(IBAction)onTextFieldDoneEditing:(id)sender {
     [self endEditing: YES];    //dismisses the keyboard
     [self updateToDoItemsList];
-    
+}
 
+- (IBAction)onDelete:(id)sender {
+    [self.delegate deleteButtonTappedOnCell:self];
 }
 
 - (void) updateToDoItemsList {
@@ -51,6 +56,10 @@
     NSArray *toDoItemList = [defaults objectForKey:@"toDoItemList"];
     
     NSMutableArray *newList = [[NSMutableArray alloc] initWithArray:toDoItemList];
+    
+//    NSIndexPath *indexPath = objc_getAssociatedObject(self.toDoItemText, &indexPathKey);
+
+    
     newList[newList.count - 1] = self.toDoItemText.text;
     
     [defaults setObject:newList forKey:@"toDoItemList"];

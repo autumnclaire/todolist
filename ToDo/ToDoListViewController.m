@@ -39,10 +39,10 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.toDoItemList = [[NSMutableArray alloc] init];
+        [self updateToDoItemListInDataStore];
+        
+        //to keep the items in the list after you close the app, comment out the above two lines and uncommend the line below
 //        self.toDoItemList = [self fetchToDoItemListFromDataStore];
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:self.toDoItemList forKey:@"toDoItemList"];
-        [defaults synchronize];
     }
     return self;
 }
@@ -62,10 +62,8 @@
     self.toDoItemList = [self fetchToDoItemListFromDataStore];
     
     // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = NO;
  
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning
